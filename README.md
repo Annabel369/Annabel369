@@ -8,9 +8,13 @@
 
 !svip 
 add vip to server with 2000 in store
+
+
 Dependece 
 
-- Edit file game\csgo\addons\counterstrikesharp\configs\admin_overrides.example.json for admin_overrides.json
+                  https://github.com/schwarper/cs2-store
+
+-                 Edit file game\csgo\addons\counterstrikesharp\configs\admin_overrides.example.json for admin_overrides.json
 
 
 
