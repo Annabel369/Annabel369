@@ -16,7 +16,7 @@ https://github.com/schwarper/cs2-store
 
 -      Edit file game\csgo\addons\counterstrikesharp\configs\admin_overrides.example.json for admin_overrides.json
 
-       opcion https://github.com/Annabel369/Frozen_Elsa/releases/tag/2.1.7
+opcion https://github.com/Annabel369/Frozen_Elsa/releases/tag/2.1.7
 
 
 <!---
