@@ -6,6 +6,14 @@
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
 
+!svip 
+add vip to server with 2000 in store
+Dependece 
+
+- Edit file game\csgo\addons\counterstrikesharp\configs\admin_overrides.example.json for admin_overrides.json
+
+
+
 <!---
 Annabel369/Annabel369 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 You can click the Preview link to take a look at your changes.
