@@ -1,0 +1,6 @@
+{
+    "Credits.svip": "{red}[ANNABEL] {blue} Credits:{green} {result} {white}Add Vip Sucess!",
+    "Credits.insufficient": "{red}[ANNABEL] {blue}Insufficient credits: {green} {result}",
+    "Credits.ok": "{red}[ANNABEL] {blue} Do you already have VIP in your account or admin"
+
+}

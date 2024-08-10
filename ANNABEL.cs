@@ -1,9 +1,11 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
+using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Commands;
-using MySqlConnector; // Replace Dapper with MySqlConnector for MySQL
+using System.Text.Json.Serialization;
+using MySqlConnector;
 using Microsoft.Extensions.Logging;
 using Dapper;
 
@@ -20,17 +22,19 @@ public class ANNABEL : BasePlugin
 
     private MySqlConnection _connection = null!;
 
+    public string VpnNotificationMessage { get; set; } = "server=localhost;uid=ogpuser;pwd=0073007;database=store";
+
     private int resultadoSubtracao;
+
+    private CCSPlayerController? executingPlayer;
 
     public override void Load(bool hotReload)
     {
-        Logger.LogInformation("Loading database from {ConnectionString}", GetConnectionString()); // Replace Path with connection string
+        Logger.LogInformation("Loading database from {ConnectionString}", GetConnectionString());
 
-        _connection = new MySqlConnection(GetConnectionString()); // Replace Path with connection string
+        _connection = new MySqlConnection(GetConnectionString());
         _connection.Open();
 
-        // Create the table if it doesn't exist
-        // Run in a separate thread to avoid blocking the main thread
         Task.Run(async () =>
         {
             await _connection.ExecuteAsync(@"
@@ -44,27 +48,21 @@ public class ANNABEL : BasePlugin
 
     private string GetConnectionString()
     {
-        // Replace with your actual MySQL connection string details
-        // Including server address, username, password, and database name
-        return "server=localhost;uid=ogpuser;pwd=0073007;database=store";
+        return VpnNotificationMessage;
     }
 
     [GameEventHandler]
     public HookResult OnPlayerKilled(EventPlayerDeath @event, GameEventInfo info)
     {
-        // Don't count suicides.
+
         if (@event.Attacker == @event.Userid) return HookResult.Continue;
 
-        // Capture the steamid of the player as `@event` will not be available outside of this function.
         var steamId = @event.Attacker?.AuthorizedSteamID?.SteamId64;
-        var timestamp = DateTime.UtcNow; // Use UTC timestamp for consistent timekeeping
+        var timestamp = DateTime.UtcNow; 
 
         if (steamId == null) return HookResult.Continue;
-
-        // Run in a separate thread to avoid blocking the main thread
         Task.Run(async () =>
         {
-            // insert or update the player's kills
             await _connection.ExecuteAsync(@"
           INSERT INTO `players` (`steamid`, `kills`, `timestamp`) VALUES (@SteamId, 1, @Timestamp)
           ON DUPLICATE KEY UPDATE `kills` = `kills` + 1, `timestamp` = @Timestamp;",
@@ -78,15 +76,73 @@ public class ANNABEL : BasePlugin
         return HookResult.Continue;
     }
 
-    [ConsoleCommand("css_kills", "Get count of kills for a player")]
+    private bool HasPermission(CCSPlayerController player, string id)
+    {
+        string permission = string.Empty;
+
+        switch (id)
+        {
+            case "Permission":
+                permission = "@css/custom-permission";
+                break;
+            case "Permission2":
+                permission = "@css/reservation";
+                break;
+            case "Permission3":
+                permission = "@css/generic";
+                break;
+            case "Permission4":
+                permission = "@css/kick";
+                break;
+            case "Permission5":
+                permission = "@css/ban";
+                break;
+            case "Permission6":
+                permission = "@css/vip";
+                break;
+            case "Permission7":
+                permission = "@css/slay";
+                break;
+            case "Permission8":
+                permission = "@css/changemap";
+                break;
+            case "Permission9":
+                permission = "@css/cvar";
+                break;
+            case "Permission10":
+                permission = "@css/config";
+                break;
+            case "Permission11":
+                permission = "@css/chat";
+                break;
+            case "Permission12":
+                permission = "@css/vote";
+                break;
+            case "Permission13":
+                permission = "@css/password";
+                break;
+             case "Permission14":
+                permission = "@css/rcon";
+                break;
+             case "Permission15":
+                permission = "@css/cheats";
+                break;
+            case "Permission16":
+                permission = "@css/root";
+                break;
+            
+        }
+
+        return (string.IsNullOrEmpty(permission) || AdminManager.PlayerHasPermissions(player, permission));
+    }
+
+
+    [ConsoleCommand("css_morte", "Get count of kills for a player")]
     public void OnKillsCommand(CCSPlayerController? player, CommandInfo commandInfo)
     {
         if (player == null) return;
-
-        // Capture the SteamID of the player as `@event` will not be available outside of this function.
         var steamId = player.AuthorizedSteamID.SteamId64;
 
-        // Run in a separate thread to avoid blocking the main thread
         Task.Run(async () =>
         {
             var result = await _connection.QueryFirstOrDefaultAsync<int>(@"SELECT `kills` FROM `players` WHERE `steamid` = @SteamId;",
@@ -95,9 +151,7 @@ public class ANNABEL : BasePlugin
                     SteamId = steamId
                 });
 
-            // Print the result to the player's chat. Note that this needs to be run on the game thread.
-            // So we use `Server.NextFrame` to run it on the next game tick.
-            Server.NextFrame(() => { player.PrintToChat($"Kills: {result}"); });
+            Server.NextFrame(() => { player?.PrintToChat($"Kills: {result}"); });
         });
     }
 
@@ -106,10 +160,14 @@ public class ANNABEL : BasePlugin
     {
         if (player == null) return;
 
-        // Capture the SteamID of the player as `@event` will not be available outside of this function.
+        if (!HasPermission(player, "Permission")){
+            player.PrintToChat(Localizer["Credits.ok"]);
+            Server.PrintToChatAll(Localizer["Credits.ok", player.PlayerName]);
+            return;
+        }
+
         var steamId = player?.AuthorizedSteamID?.SteamId64;
 
-        // Run in a separate thread to avoid blocking the main thread
         Task.Run(async () =>
         {
             var result = await _connection.QueryFirstOrDefaultAsync<int>(@"SELECT `Credits` FROM `store_players` WHERE `SteamID` = @SteamId;",
@@ -118,10 +176,13 @@ public class ANNABEL : BasePlugin
                     SteamId = steamId
                 });
 
-            // Print the result to the player's chat. Note that this needs to be run on the game thread.
-            // So we use `Server.NextFrame` to run it on the next game tick.
             Server.NextFrame(() => { 
-                if (result >= 2000) { resultadoSubtracao = result - 2000;} else {player?.PrintToChat($"Credits insufient: {result}");}
+                if (result >= 2000) { resultadoSubtracao = result - 2000; 
+                player.PrintToChat("{red}[ANNABEL] {blue} Credits:{green} {result} {white}Add Vip Sucess!");
+                } else {
+                    player?.PrintToChat(Localizer["Credits.insufficient"]);
+                    Server.PrintToChatAll(Localizer["Credits.insufficient", player.PlayerName]);
+                    }
                 
                 });
         });
@@ -139,16 +200,16 @@ public class ANNABEL : BasePlugin
                     SteamId = steamId
                 });
 
-            // Print the result to the player's chat. Note that this needs to be run on the game thread.
-            // So we use `Server.NextFrame` to run it on the next game tick.
             Server.NextFrame(() => { 
-                player?.PrintToChat($"Credits: {result} Add Vip Sucess!");
+                player?.PrintToChat(Localizer["Credits.insufficient"]);
+                Server.PrintToChatAll(Localizer["Credits.svip", player.PlayerName]);
                 if (result >= 2000) { resultadoSubtracao = result - 2000;}
                 
                 });
         });
     }
     }
+    
 
     
 }

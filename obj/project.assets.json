@@ -2932,11 +2932,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/amauri/Documentos/Projetosdot8/Marius_database (3)/ANNABEL/ANNABEL.csproj",
+      "projectUniqueName": "/home/amauri/Documentos/Projetosdot8/ANNABEL/ANNABEL.csproj",
       "projectName": "ANNABEL",
-      "projectPath": "/home/amauri/Documentos/Projetosdot8/Marius_database (3)/ANNABEL/ANNABEL.csproj",
+      "projectPath": "/home/amauri/Documentos/Projetosdot8/ANNABEL/ANNABEL.csproj",
       "packagesPath": "/home/amauri/.nuget/packages/",
-      "outputPath": "/home/amauri/Documentos/Projetosdot8/Marius_database (3)/ANNABEL/obj/",
+      "outputPath": "/home/amauri/Documentos/Projetosdot8/ANNABEL/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/amauri/.nuget/NuGet/NuGet.Config"

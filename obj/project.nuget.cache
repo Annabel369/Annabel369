@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bXrr/IaD2vEHN2bEkQi3+i6VuxHV5cMCXLg9qHZcVqe2fEMLHQEoDPbz7yMlKVbq3f3azRcBQCIRsdLNeFcZ0w==",
+  "dgSpecHash": "kdjUoK77459Bs0cDvWVHPlWBONe/OWU24fHnLld0S9vil7J92R4iws3JfjJzqZm23/22OpHPKz7nzzS2YbN33Q==",
   "success": true,
-  "projectFilePath": "/home/amauri/Documentos/Projetosdot8/Marius_database (3)/ANNABEL/ANNABEL.csproj",
+  "projectFilePath": "/home/amauri/Documentos/Projetosdot8/ANNABEL/ANNABEL.csproj",
   "expectedPackageFiles": [
     "/home/amauri/.nuget/packages/counterstrikesharp.api/1.0.246/counterstrikesharp.api.1.0.246.nupkg.sha512",
     "/home/amauri/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",
