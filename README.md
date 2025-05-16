@@ -8,7 +8,8 @@
 
 !svip 
 add vip to server with 2000 in store
-
+Donation Link:
+https://www.paypal.com/donate/?hosted_button_id=R4D3GTFBFPSXC
 
 Dependece 
 
