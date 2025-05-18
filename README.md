@@ -24,3 +24,5 @@ opcion https://github.com/Annabel369/Frozen_Elsa/releases/tag/2.1.7
 Annabel369/Annabel369 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 You can click the Preview link to take a look at your changes.
 --->
+
+<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'H2H411P12P');kofiwidget2.draw();</script> 
